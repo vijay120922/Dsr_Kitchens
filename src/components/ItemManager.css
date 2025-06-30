@@ -1,17 +1,89 @@
 /* src/components/ItemManager.css */
-.item-manager input {
-    margin-right: 10px;
-    padding: 5px;
-  }
-  .item-manager button {
-    margin: 5px;
-    padding: 5px 10px;
-  }
-  .item-manager ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  .item-manager li {
-    margin-top: 10px;
-  }
-  
+
+.item-manager {
+  padding: 24px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.back-btn {
+  margin-bottom: 16px;
+  padding: 8px 16px;
+  background: #e5e7eb;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.item-form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 32px;
+}
+
+.item-form h2 {
+  margin-bottom: 16px;
+  color: #111827;
+}
+
+.item-form input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.item-form button {
+  padding: 10px 16px;
+  background-color: #111827;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.item-list {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.item-list h3 {
+  margin-bottom: 16px;
+}
+
+.item-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 10px 0;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-name {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.item-price {
+  color: #6b7280;
+}
+
+.item-actions button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  margin-left: 8px;
+  cursor: pointer;
+}

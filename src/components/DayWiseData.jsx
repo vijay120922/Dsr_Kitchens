@@ -1,29 +1,30 @@
+// src/components/DayWiseData.jsx
 import React, { useEffect, useState } from "react";
 import "./DayWiseData.css";
 
-function DayWiseData() {
+function DayWiseData({ onBack }) {
   const [groupedData, setGroupedData] = useState({});
 
   useEffect(() => {
     const sales = JSON.parse(localStorage.getItem("sales")) || [];
+
     const grouped = {};
 
     sales.forEach((sale) => {
       const date = sale.date;
-      if (!grouped[date]) grouped[date] = {};
+      if (!grouped[date]) {
+        grouped[date] = {};
+      }
 
-      const items = Array.isArray(sale.items) ? sale.items : [sale];
+      if (!grouped[date][sale.itemName]) {
+        grouped[date][sale.itemName] = {
+          quantity: 0,
+          revenue: 0,
+        };
+      }
 
-      items.forEach((entry) => {
-        if (!entry?.itemName || !entry?.quantity || !entry?.total) return;
-
-        if (!grouped[date][entry.itemName]) {
-          grouped[date][entry.itemName] = { quantity: 0, revenue: 0 };
-        }
-
-        grouped[date][entry.itemName].quantity += entry.quantity;
-        grouped[date][entry.itemName].revenue += entry.total;
-      });
+      grouped[date][sale.itemName].quantity += sale.quantity;
+      grouped[date][sale.itemName].revenue += sale.total;
     });
 
     setGroupedData(grouped);
@@ -31,9 +32,11 @@ function DayWiseData() {
 
   return (
     <div className="daywise-data">
-      <h2>Day-wise Sales Report</h2>
+      <button className="back-btn" onClick={onBack}>← Back</button>
+      <h2>📆 Day-wise Sales Report</h2>
+
       {Object.keys(groupedData).length === 0 ? (
-        <p>No sales data found.</p>
+        <p className="empty-msg">No sales data available.</p>
       ) : (
         Object.entries(groupedData).map(([date, items], idx) => {
           const totalRevenue = Object.values(items).reduce(
@@ -42,14 +45,14 @@ function DayWiseData() {
           );
 
           return (
-            <div key={idx} className="day-block">
+            <div className="day-block" key={idx}>
               <h3>{date}</h3>
               <table>
                 <thead>
                   <tr>
                     <th>Item</th>
                     <th>Quantity Sold</th>
-                    <th>Revenue (₹)</th>
+                    <th>Revenue ($)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -57,12 +60,12 @@ function DayWiseData() {
                     <tr key={i}>
                       <td>{name}</td>
                       <td>{data.quantity}</td>
-                      <td>₹{data.revenue.toFixed(2)}</td>
+                      <td>${data.revenue.toFixed(2)}</td>
                     </tr>
                   ))}
                   <tr className="total-row">
                     <td colSpan="2"><strong>Total Revenue</strong></td>
-                    <td><strong>₹{totalRevenue.toFixed(2)}</strong></td>
+                    <td><strong>${totalRevenue.toFixed(2)}</strong></td>
                   </tr>
                 </tbody>
               </table>

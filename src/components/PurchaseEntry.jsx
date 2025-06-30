@@ -1,10 +1,11 @@
+// src/components/PurchaseEntry.jsx
 import React, { useState, useEffect } from "react";
 import "./PurchaseEntry.css";
 
-function PurchaseEntry() {
+function PurchaseEntry({ onBack }) {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState(1);
   const [purchaseList, setPurchaseList] = useState([]);
 
   useEffect(() => {
@@ -12,90 +13,114 @@ function PurchaseEntry() {
     setItems(storedItems);
   }, []);
 
-  const handleAddItem = () => {
-    if (!selectedItem || !quantity || parseInt(quantity) <= 0) return;
-
+  const addToPurchaseList = () => {
     const item = items.find((i) => i.name === selectedItem);
-    const already = purchaseList.find((p) => p.itemName === selectedItem);
+    if (!item || quantity <= 0) return;
 
-    if (!item) return;
-
-    if (already) {
-      already.quantity += parseInt(quantity);
-      already.total += item.price * parseInt(quantity);
-      setPurchaseList([...purchaseList]);
+    const exists = purchaseList.find((p) => p.name === selectedItem);
+    if (exists) {
+      const updated = purchaseList.map((p) =>
+        p.name === selectedItem
+          ? { ...p, quantity: p.quantity + quantity, total: (p.quantity + quantity) * p.price }
+          : p
+      );
+      setPurchaseList(updated);
     } else {
-      setPurchaseList([
-        ...purchaseList,
-        {
-          itemName: item.name,
-          quantity: parseInt(quantity),
-          total: item.price * parseInt(quantity),
-        },
-      ]);
+      const entry = {
+        name: selectedItem,
+        price: item.price,
+        quantity,
+        total: item.price * quantity,
+      };
+      setPurchaseList([...purchaseList, entry]);
     }
 
     setSelectedItem("");
-    setQuantity("");
+    setQuantity(1);
   };
 
-  const handleRemove = (idx) => {
-    const updated = [...purchaseList];
-    updated.splice(idx, 1);
-    setPurchaseList(updated);
+  const removeFromPurchaseList = (name) => {
+    setPurchaseList(purchaseList.filter((p) => p.name !== name));
   };
 
-  const handleSubmitPurchase = () => {
-    if (purchaseList.length === 0) return;
-
+  const handleSubmit = () => {
     const sales = JSON.parse(localStorage.getItem("sales")) || [];
+
     const today = new Date().toISOString().split("T")[0];
-
-    sales.push({
+    const newSales = purchaseList.map((entry) => ({
+      itemName: entry.name,
+      price: entry.price,
+      quantity: entry.quantity,
+      total: entry.total,
       date: today,
-      timestamp: new Date().toISOString(),
-      items: purchaseList,
-    });
+    }));
 
-    localStorage.setItem("sales", JSON.stringify(sales));
+    const updatedSales = [...sales, ...newSales];
+    localStorage.setItem("sales", JSON.stringify(updatedSales));
+
     setPurchaseList([]);
+    alert("Purchase recorded successfully.");
   };
+
+  const subtotal = purchaseList.reduce((sum, i) => sum + i.total, 0);
+  const tax = subtotal * 0.085;
+  const total = subtotal + tax;
 
   return (
     <div className="purchase-entry">
-      <h2>Record Customer Purchase</h2>
-      <div className="purchase-form">
-        <select value={selectedItem} onChange={(e) => setSelectedItem(e.target.value)}>
-          <option value="">Select item</option>
-          {items.map((item, idx) => (
-            <option key={idx} value={item.name}>
-              {item.name} — ₹{item.price}
-            </option>
-          ))}
-        </select>
-        <input
-          type="number"
-          placeholder="Qty"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-        />
-        <button onClick={handleAddItem}>Add</button>
-      </div>
+      <button className="back-btn" onClick={onBack}>← Back</button>
 
-      {purchaseList.length > 0 && (
+      <div className="purchase-wrapper">
+        <div className="purchase-form">
+          <h2>Add Items to Purchase</h2>
+
+          <select
+            value={selectedItem}
+            onChange={(e) => setSelectedItem(e.target.value)}
+          >
+            <option value="">Select Item</option>
+            {items.map((item, i) => (
+              <option key={i} value={item.name}>
+                {item.name} - ${item.price.toFixed(2)}
+              </option>
+            ))}
+          </select>
+
+          <input
+            type="number"
+            placeholder="Quantity"
+            value={quantity}
+            min={1}
+            onChange={(e) => setQuantity(Number(e.target.value))}
+          />
+
+          <button onClick={addToPurchaseList}>+ Add to Purchase List</button>
+        </div>
+
         <div className="purchase-list">
           <h3>Purchase List</h3>
-          <ul>
-            {purchaseList.map((entry, idx) => (
-              <li key={idx}>
-                {entry.itemName} — Qty: {entry.quantity} — ₹{entry.total.toFixed(2)}
-                <button onClick={() => handleRemove(idx)}>❌</button>
-              </li>
-            ))}
-          </ul>
-          <button onClick={handleSubmitPurchase}>Submit Purchase</button>
+          {purchaseList.map((item, i) => (
+            <div key={i} className="purchase-item">
+              <span>{item.name}</span>
+              <span>
+                Quantity: {item.quantity} × ${item.price.toFixed(2)}
+              </span>
+              <span>${item.total.toFixed(2)}</span>
+              <button onClick={() => removeFromPurchaseList(item.name)}>🗑️</button>
+            </div>
+          ))}
+
+          {purchaseList.length > 0 && (
+            <div className="totals">
+              <div>Subtotal: ${subtotal.toFixed(2)}</div>
+              <div>Tax (8.5%): ${tax.toFixed(2)}</div>
+              <div className="total-amount">Total: ${total.toFixed(2)}</div>
+
+              <button onClick={handleSubmit} className="submit-btn">Submit Purchase</button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

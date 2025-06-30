@@ -1,76 +1,78 @@
+// src/components/SalesDashboard.jsx
 import React, { useEffect, useState } from "react";
 import "./SalesDashboard.css";
 
-function SalesDashboard() {
-  const [report, setReport] = useState([]);
-  const [totalRevenue, setTotalRevenue] = useState(0);
+function SalesDashboard({ onBack }) {
+  const [salesData, setSalesData] = useState([]);
 
   useEffect(() => {
-    const sales = JSON.parse(localStorage.getItem("sales")) || [];
+    const allSales = JSON.parse(localStorage.getItem("sales")) || [];
     const today = new Date().toISOString().split("T")[0];
-    const todaySales = sales.filter((s) => s.date === today);
 
-    const summary = {};
-
-    todaySales.forEach((purchase) => {
-      // Handle both new (items array) and old (single entry) formats
-      const items = Array.isArray(purchase.items)
-        ? purchase.items
-        : [purchase];
-
-      items.forEach((entry) => {
-        if (!entry?.itemName || !entry?.quantity || !entry?.total) return;
-
-        if (!summary[entry.itemName]) {
-          summary[entry.itemName] = { quantity: 0, revenue: 0 };
-        }
-
-        summary[entry.itemName].quantity += entry.quantity;
-        summary[entry.itemName].revenue += entry.total;
-      });
-    });
-
-    const data = Object.entries(summary).map(([name, stats]) => ({
-      name,
-      quantity: stats.quantity,
-      revenue: stats.revenue,
-    }));
-
-    setReport(data);
-    setTotalRevenue(data.reduce((sum, item) => sum + item.revenue, 0));
+    const todaySales = allSales.filter((sale) => sale.date === today);
+    setSalesData(todaySales);
   }, []);
 
+  const itemStats = {};
+
+  salesData.forEach((sale) => {
+    if (!itemStats[sale.itemName]) {
+      itemStats[sale.itemName] = {
+        quantity: 0,
+        price: sale.price,
+        revenue: 0,
+      };
+    }
+    itemStats[sale.itemName].quantity += sale.quantity;
+    itemStats[sale.itemName].revenue += sale.total;
+  });
+
+  const totalRevenue = salesData.reduce((sum, s) => sum + s.total, 0);
+  const totalItemsSold = salesData.reduce((sum, s) => sum + s.quantity, 0);
+
   return (
-    <div className="sales-dashboard">
-      <h2>Today's Sales Summary</h2>
-      {report.length === 0 ? (
-        <p>No sales recorded today.</p>
-      ) : (
+    <div className="dashboard">
+      <button className="back-btn" onClick={onBack}>← Back</button>
+      <h2>Daily Sales Summary</h2>
+
+      <div className="dashboard-summary">
+        <div className="summary-box">
+          <p>Total Items Sold</p>
+          <h3>{totalItemsSold}</h3>
+        </div>
+        <div className="summary-box">
+          <p>Total Revenue</p>
+          <h3>${totalRevenue.toFixed(2)}</h3>
+        </div>
+      </div>
+
+      <div className="sales-breakdown">
+        <h3>Item Sales Breakdown</h3>
         <table>
           <thead>
             <tr>
-              <th>Item</th>
-              <th>Qty Sold</th>
-              <th>Revenue (₹)</th>
+              <th>Item Name</th>
+              <th>Quantity Sold</th>
+              <th>Unit Price</th>
+              <th>Revenue</th>
             </tr>
           </thead>
           <tbody>
-            {report.map((item, idx) => (
-              <tr key={idx}>
-                <td>{item.name}</td>
-                <td>{item.quantity}</td>
-                <td>₹{item.revenue.toFixed(2)}</td>
+            {Object.entries(itemStats).map(([name, data], index) => (
+              <tr key={index}>
+                <td>{name}</td>
+                <td>{data.quantity}</td>
+                <td>${data.price.toFixed(2)}</td>
+                <td>${data.revenue.toFixed(2)}</td>
               </tr>
             ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colSpan="2"><strong>Total Revenue</strong></td>
-              <td><strong>₹{totalRevenue.toFixed(2)}</strong></td>
+            <tr className="total-row">
+              <td colSpan="3"><strong>Total Revenue:</strong></td>
+              <td><strong>${totalRevenue.toFixed(2)}</strong></td>
             </tr>
-          </tfoot>
+          </tbody>
         </table>
-      )}
+      </div>
     </div>
   );
 }

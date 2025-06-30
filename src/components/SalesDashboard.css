@@ -1,21 +1,76 @@
 /* src/components/SalesDashboard.css */
-.sales-dashboard {
-    margin-top: 20px;
+
+.dashboard {
+    padding: 24px;
+    max-width: 900px;
+    margin: auto;
   }
-  .sales-dashboard table {
+  
+  .back-btn {
+    margin-bottom: 16px;
+    padding: 8px 16px;
+    background: #e5e7eb;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    color: #111827;
+  }
+  
+  .dashboard-summary {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  
+  .summary-box {
+    flex: 1;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .summary-box p {
+    color: #6b7280;
+    margin-bottom: 6px;
+  }
+  
+  .summary-box h3 {
+    font-size: 24px;
+    color: #111827;
+  }
+  
+  .sales-breakdown {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+  }
+  
+  .sales-breakdown h3 {
+    margin-bottom: 16px;
+    color: #111827;
+  }
+  
+  .sales-breakdown table {
     width: 100%;
     border-collapse: collapse;
   }
-  .sales-dashboard th,
-  .sales-dashboard td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: center;
+  
+  .sales-breakdown th,
+  .sales-breakdown td {
+    padding: 12px;
+    border-bottom: 1px solid #f3f4f6;
+    text-align: left;
   }
-  .sales-dashboard thead {
-    background-color: #f0f0f0;
-  }
-  .sales-dashboard tfoot {
-    background-color: #e0ffe0;
+  
+  .total-row td {
+    font-weight: bold;
   }
   
