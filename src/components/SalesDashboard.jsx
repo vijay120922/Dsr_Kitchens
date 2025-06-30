@@ -1,4 +1,3 @@
-// src/components/SalesDashboard.jsx
 import React, { useEffect, useState } from "react";
 import "./SalesDashboard.css";
 
@@ -9,27 +8,36 @@ function SalesDashboard() {
   useEffect(() => {
     const sales = JSON.parse(localStorage.getItem("sales")) || [];
     const today = new Date().toISOString().split("T")[0];
+    const todaySales = sales.filter((s) => s.date === today);
 
-    const todaySales = sales.filter((sale) => sale.date === today);
+    const summary = {};
 
-    const grouped = {};
+    todaySales.forEach((purchase) => {
+      // Handle both new (items array) and old (single entry) formats
+      const items = Array.isArray(purchase.items)
+        ? purchase.items
+        : [purchase];
 
-    todaySales.forEach((sale) => {
-      if (!grouped[sale.itemName]) {
-        grouped[sale.itemName] = { quantity: 0, total: 0 };
-      }
-      grouped[sale.itemName].quantity += sale.quantity;
-      grouped[sale.itemName].total += sale.total;
+      items.forEach((entry) => {
+        if (!entry?.itemName || !entry?.quantity || !entry?.total) return;
+
+        if (!summary[entry.itemName]) {
+          summary[entry.itemName] = { quantity: 0, revenue: 0 };
+        }
+
+        summary[entry.itemName].quantity += entry.quantity;
+        summary[entry.itemName].revenue += entry.total;
+      });
     });
 
-    const reportData = Object.entries(grouped).map(([name, data]) => ({
+    const data = Object.entries(summary).map(([name, stats]) => ({
       name,
-      quantity: data.quantity,
-      revenue: data.total,
+      quantity: stats.quantity,
+      revenue: stats.revenue,
     }));
 
-    setReport(reportData);
-    setTotalRevenue(reportData.reduce((sum, item) => sum + item.revenue, 0));
+    setReport(data);
+    setTotalRevenue(data.reduce((sum, item) => sum + item.revenue, 0));
   }, []);
 
   return (
@@ -42,7 +50,7 @@ function SalesDashboard() {
           <thead>
             <tr>
               <th>Item</th>
-              <th>Quantity Sold</th>
+              <th>Qty Sold</th>
               <th>Revenue (₹)</th>
             </tr>
           </thead>

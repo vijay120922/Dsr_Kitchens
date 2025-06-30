@@ -1,4 +1,3 @@
-// src/components/DayWiseData.jsx
 import React, { useEffect, useState } from "react";
 import "./DayWiseData.css";
 
@@ -7,21 +6,24 @@ function DayWiseData() {
 
   useEffect(() => {
     const sales = JSON.parse(localStorage.getItem("sales")) || [];
-
     const grouped = {};
 
     sales.forEach((sale) => {
       const date = sale.date;
-      if (!grouped[date]) {
-        grouped[date] = {};
-      }
+      if (!grouped[date]) grouped[date] = {};
 
-      if (!grouped[date][sale.itemName]) {
-        grouped[date][sale.itemName] = { quantity: 0, revenue: 0 };
-      }
+      const items = Array.isArray(sale.items) ? sale.items : [sale];
 
-      grouped[date][sale.itemName].quantity += sale.quantity;
-      grouped[date][sale.itemName].revenue += sale.total;
+      items.forEach((entry) => {
+        if (!entry?.itemName || !entry?.quantity || !entry?.total) return;
+
+        if (!grouped[date][entry.itemName]) {
+          grouped[date][entry.itemName] = { quantity: 0, revenue: 0 };
+        }
+
+        grouped[date][entry.itemName].quantity += entry.quantity;
+        grouped[date][entry.itemName].revenue += entry.total;
+      });
     });
 
     setGroupedData(grouped);
