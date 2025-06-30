@@ -88,6 +88,17 @@ function DayWiseData() {
                   </tr>
                 </tbody>
               </table>
+              <button
+  className="danger-btn"
+  onClick={() => {
+    if (confirm("Are you sure you want to delete all day-wise sales data?")) {
+      localStorage.removeItem("sales");
+      window.location.reload();
+    }
+  }}
+>
+  🗑️ Reset Day-wise Data
+</button>
             </div>
           );
         })

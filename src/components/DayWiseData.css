@@ -53,25 +53,46 @@
   .total-row td {
     font-weight: bold;
   }
-  .download-btn {
-    background-color: #10b981; /* Emerald green */
-    color: white;
-    font-size: 14px;
-    font-weight: 500;
+  .back-btn,
+  .download-btn,
+  .danger-btn {
+    background-color: #e5e7eb;
+    color: #1f2937;
     padding: 10px 16px;
     border: none;
     border-radius: 8px;
+    margin: 8px 8px 16px 0;
     cursor: pointer;
-    margin-bottom: 20px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 500;
+    transition: all 0.2s ease;
   }
   
-  .download-btn:hover {
-    background-color: #059669;
+  .download-btn {
+    background-color: #3b82f6;
+    color: white;
+  }
+  
+  .danger-btn {
+    background-color: #ef4444;
+    color: white;
+  }
+  
+  .back-btn:hover,
+  .download-btn:hover,
+  .danger-btn:hover {
+    opacity: 0.9;
     transform: translateY(-1px);
   }
   
-  .download-btn:active {
-    transform: scale(0.98);
+  /* 📱 Responsive: Stack buttons on small screens */
+  @media (max-width: 600px) {
+    .back-btn,
+    .download-btn,
+    .danger-btn {
+      width: 100%;
+      margin: 6px 0;
+      font-size: 16px;
+    }
   }
+  
   

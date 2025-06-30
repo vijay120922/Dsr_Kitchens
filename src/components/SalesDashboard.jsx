@@ -69,6 +69,17 @@ function SalesDashboard() {
               <h3>💰 Total Revenue</h3>
               <p><strong>₹{totalRevenue.toFixed(2)}</strong></p>
             </div>
+            <button
+  className="danger-btn"
+  onClick={() => {
+    if (confirm("Are you sure you want to delete all sales data?")) {
+      localStorage.removeItem("sales");
+      window.location.reload(); // Refresh to reflect changes
+    }
+  }}
+>
+  🗑️ Reset Sales Data
+</button>
           </>
         )}
       </div>
