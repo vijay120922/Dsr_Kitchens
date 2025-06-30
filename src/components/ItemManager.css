@@ -1,0 +1,17 @@
+/* src/components/ItemManager.css */
+.item-manager input {
+    margin-right: 10px;
+    padding: 5px;
+  }
+  .item-manager button {
+    margin: 5px;
+    padding: 5px 10px;
+  }
+  .item-manager ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  .item-manager li {
+    margin-top: 10px;
+  }
+  

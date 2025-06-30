@@ -1,0 +1,21 @@
+/* src/components/SalesDashboard.css */
+.sales-dashboard {
+    margin-top: 20px;
+  }
+  .sales-dashboard table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .sales-dashboard th,
+  .sales-dashboard td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  .sales-dashboard thead {
+    background-color: #f0f0f0;
+  }
+  .sales-dashboard tfoot {
+    background-color: #e0ffe0;
+  }
+  

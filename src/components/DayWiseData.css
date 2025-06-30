@@ -1,0 +1,25 @@
+/* src/components/DayWiseData.css */
+.daywise-data {
+    margin-top: 20px;
+  }
+  .daywise-data h3 {
+    margin-top: 30px;
+  }
+  .daywise-data table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  .daywise-data th,
+  .daywise-data td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  .daywise-data thead {
+    background-color: #f8f8f8;
+  }
+  .total-row {
+    background-color: #e7ffe7;
+  }
+  

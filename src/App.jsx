@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import React, { useState, useEffect } from "react";
+import ItemManager from "./components/ItemManager";
+import PurchaseEntry from "./components/PurchaseEntry";
+import SalesDashboard from "./components/SalesDashboard";
+import DayWiseData from "./components/DayWiseData";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [view, setView] = useState("dashboard");
+
+  // Initialize localStorage on first load
+  useEffect(() => {
+    if (!localStorage.getItem("items")) {
+      localStorage.setItem("items", JSON.stringify([]));
+    }
+    if (!localStorage.getItem("sales")) {
+      localStorage.setItem("sales", JSON.stringify([]));
+    }
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ padding: "20px", fontFamily: "Arial" }}>
+      <h1>🍜 Chinese Restaurant Admin</h1>
+      <div style={{ marginBottom: "20px" }}>
+        <button onClick={() => setView("manage")}>Manage Items</button>
+        <button onClick={() => setView("purchase")}>Record Purchase</button>
+        <button onClick={() => setView("dashboard")}>Dashboard</button>
+        <button onClick={() => setView("history")}>Day-wise Report</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+
+      {view === "manage" && <ItemManager />}
+      {view === "purchase" && <PurchaseEntry />}
+      {view === "dashboard" && <SalesDashboard />}
+      {view === "history" && <DayWiseData />}
+    </div>
+  );
 }
 
-export default App
+export default App;

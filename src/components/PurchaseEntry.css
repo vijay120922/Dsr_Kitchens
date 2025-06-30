@@ -1,0 +1,36 @@
+/* src/components/PurchaseEntry.css */
+.purchase-entry {
+    margin-top: 20px;
+  }
+  
+  .purchase-form select,
+  .purchase-form input {
+    margin: 5px;
+    padding: 6px;
+  }
+  
+  .purchase-form button {
+    padding: 6px 12px;
+    margin-left: 5px;
+  }
+  
+  .purchase-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .purchase-list li {
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .purchase-list button {
+    margin-left: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
