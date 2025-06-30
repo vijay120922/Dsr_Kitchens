@@ -5,6 +5,10 @@
     max-width: 900px;
     margin: auto;
   }
+
+  
+
+  
   
   .back-btn {
     margin-bottom: 16px;
@@ -92,5 +96,16 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .purchase-wrapper {
+      flex-direction: column;
+    }
+  
+    .purchase-form,
+    .purchase-list {
+      width: 100%;
+    }
   }
   

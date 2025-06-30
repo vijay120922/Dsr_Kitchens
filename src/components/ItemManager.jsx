@@ -56,7 +56,7 @@ function ItemManager({ onBack }) {
         />
         <input
           type="number"
-          placeholder="Price ($)"
+          placeholder="Price (Rs.)"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
@@ -72,7 +72,7 @@ function ItemManager({ onBack }) {
           <div className="item-card" key={index}>
             <div className="item-info">
               <div className="item-name">{item.name}</div>
-              <div className="item-price">${item.price.toFixed(2)}</div>
+              <div className="item-price">Rs.{item.price.toFixed(2)}</div>
             </div>
             <div className="item-actions">
               <button onClick={() => handleEdit(index)}>✏️</button>

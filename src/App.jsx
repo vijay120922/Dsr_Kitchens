@@ -22,10 +22,8 @@ function App() {
     <div className="app-container">
       {!view && (
         <div className="home-grid">
-          <h1 className="home-heading">Welcome to Dashboard</h1>
-          <p className="home-subheading">
-            Manage your restaurant operations efficiently
-          </p>
+          <h1 className="home-heading">DSR Kitchens</h1>
+          
           <div className="card-grid">
             <div className="card" onClick={() => setView("manage")}>
               <span className="card-icon">📋</span>

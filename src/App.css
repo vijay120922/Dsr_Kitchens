@@ -29,6 +29,7 @@
   gap: 24px;
   max-width: 900px;
   margin: auto;
+  padding: 0 16px;
 }
 
 .card {
@@ -62,4 +63,32 @@
   color: #3b82f6;
   font-weight: 500;
   margin-top: 6px;
+}
+
+/* 🔁 Responsive Adjustments */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 24px 16px;
+  }
+
+  .home-heading {
+    font-size: 24px;
+  }
+
+  .home-subheading {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .card h3 {
+    font-size: 16px;
+  }
+
+  .card-icon {
+    font-size: 24px;
+  }
 }

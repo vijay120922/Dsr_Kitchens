@@ -63,8 +63,8 @@ function PurchaseEntry({ onBack }) {
   };
 
   const subtotal = purchaseList.reduce((sum, i) => sum + i.total, 0);
-  const tax = subtotal * 0.085;
-  const total = subtotal + tax;
+  
+  const total = subtotal 
 
   return (
     <div className="purchase-entry">
@@ -81,7 +81,7 @@ function PurchaseEntry({ onBack }) {
             <option value="">Select Item</option>
             {items.map((item, i) => (
               <option key={i} value={item.name}>
-                {item.name} - ${item.price.toFixed(2)}
+                {item.name} - Rs.{item.price.toFixed(2)}
               </option>
             ))}
           </select>
@@ -103,18 +103,17 @@ function PurchaseEntry({ onBack }) {
             <div key={i} className="purchase-item">
               <span>{item.name}</span>
               <span>
-                Quantity: {item.quantity} × ${item.price.toFixed(2)}
+                Quantity: {item.quantity} × Rs.{item.price.toFixed(2)}
               </span>
-              <span>${item.total.toFixed(2)}</span>
+              <span>Rs.{item.total.toFixed(2)}</span>
               <button onClick={() => removeFromPurchaseList(item.name)}>🗑️</button>
             </div>
           ))}
 
           {purchaseList.length > 0 && (
             <div className="totals">
-              <div>Subtotal: ${subtotal.toFixed(2)}</div>
-              <div>Tax (8.5%): ${tax.toFixed(2)}</div>
-              <div className="total-amount">Total: ${total.toFixed(2)}</div>
+           
+              <div className="total-amount">Total: Rs.{total.toFixed(2)}</div>
 
               <button onClick={handleSubmit} className="submit-btn">Submit Purchase</button>
             </div>

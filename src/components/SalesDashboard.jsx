@@ -1,77 +1,76 @@
 // src/components/SalesDashboard.jsx
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./SalesDashboard.css";
 
-function SalesDashboard({ onBack }) {
-  const [salesData, setSalesData] = useState([]);
+function SalesDashboard() {
+  const [summary, setSummary] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const allSales = JSON.parse(localStorage.getItem("sales")) || [];
-    const today = new Date().toISOString().split("T")[0];
 
-    const todaySales = allSales.filter((sale) => sale.date === today);
-    setSalesData(todaySales);
+    const today = new Date().toISOString().slice(0, 10);
+    const todaySales = allSales.filter((s) => s.date === today);
+
+    const result = {};
+    todaySales.forEach(({ itemName, quantity, price }) => {
+      if (!result[itemName]) result[itemName] = { quantity: 0, revenue: 0 };
+      result[itemName].quantity += quantity;
+      result[itemName].revenue += price * quantity;
+    });
+
+    setSummary(result);
   }, []);
 
-  const itemStats = {};
+  const downloadCSV = () => {
+    const rows = [["Item", "Quantity Sold", "Revenue (₹)"]];
+    Object.entries(summary).forEach(([name, data]) => {
+      rows.push([name, data.quantity, data.revenue.toFixed(2)]);
+    });
 
-  salesData.forEach((sale) => {
-    if (!itemStats[sale.itemName]) {
-      itemStats[sale.itemName] = {
-        quantity: 0,
-        price: sale.price,
-        revenue: 0,
-      };
-    }
-    itemStats[sale.itemName].quantity += sale.quantity;
-    itemStats[sale.itemName].revenue += sale.total;
-  });
+    const csvContent =
+      "data:text/csv;charset=utf-8," + rows.map((r) => r.join(",")).join("\n");
 
-  const totalRevenue = salesData.reduce((sum, s) => sum + s.total, 0);
-  const totalItemsSold = salesData.reduce((sum, s) => sum + s.quantity, 0);
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "today_sales.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const totalRevenue = Object.values(summary).reduce(
+    (sum, item) => sum + item.revenue,
+    0
+  );
 
   return (
-    <div className="dashboard">
-      <button className="back-btn" onClick={onBack}>← Back</button>
-      <h2>Daily Sales Summary</h2>
+    <div className="dashboard-container">
+      <h2>📊 Today's Sales</h2>
+      <button onClick={() => navigate("/")} className="back-btn">← Back</button>
+      <button className="download-btn" onClick={downloadCSV}>Download CSV</button>
 
       <div className="dashboard-summary">
-        <div className="summary-box">
-          <p>Total Items Sold</p>
-          <h3>{totalItemsSold}</h3>
-        </div>
-        <div className="summary-box">
-          <p>Total Revenue</p>
-          <h3>${totalRevenue.toFixed(2)}</h3>
-        </div>
-      </div>
-
-      <div className="sales-breakdown">
-        <h3>Item Sales Breakdown</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Item Name</th>
-              <th>Quantity Sold</th>
-              <th>Unit Price</th>
-              <th>Revenue</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(itemStats).map(([name, data], index) => (
-              <tr key={index}>
-                <td>{name}</td>
-                <td>{data.quantity}</td>
-                <td>${data.price.toFixed(2)}</td>
-                <td>${data.revenue.toFixed(2)}</td>
-              </tr>
+        {Object.entries(summary).length === 0 ? (
+          <p>No sales recorded today.</p>
+        ) : (
+          <>
+            {Object.entries(summary).map(([item, data], i) => (
+              <div key={i} className="summary-box">
+                <h3>{item}</h3>
+                <p>Sold: {data.quantity}</p>
+                <p>Revenue: ₹{data.revenue.toFixed(2)}</p>
+              </div>
             ))}
-            <tr className="total-row">
-              <td colSpan="3"><strong>Total Revenue:</strong></td>
-              <td><strong>${totalRevenue.toFixed(2)}</strong></td>
-            </tr>
-          </tbody>
-        </table>
+
+            <div className="total-revenue-box">
+              <h3>💰 Total Revenue</h3>
+              <p><strong>₹{totalRevenue.toFixed(2)}</strong></p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
