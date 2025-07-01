@@ -1,4 +1,3 @@
-// src/components/PurchaseEntry.jsx
 import React, { useState, useEffect } from "react";
 import "./PurchaseEntry.css";
 
@@ -45,14 +44,14 @@ function PurchaseEntry({ onBack }) {
 
   const handleSubmit = () => {
     const sales = JSON.parse(localStorage.getItem("sales")) || [];
+    const timestamp = new Date().toISOString();  // Full Date & Time stored
 
-    const today = new Date().toISOString().split("T")[0];
     const newSales = purchaseList.map((entry) => ({
       itemName: entry.name,
       price: entry.price,
       quantity: entry.quantity,
       total: entry.total,
-      date: today,
+      timestamp: timestamp
     }));
 
     const updatedSales = [...sales, ...newSales];
@@ -63,8 +62,8 @@ function PurchaseEntry({ onBack }) {
   };
 
   const subtotal = purchaseList.reduce((sum, i) => sum + i.total, 0);
-  
-  const total = subtotal 
+
+  const total = subtotal;
 
   return (
     <div className="purchase-entry">
@@ -112,9 +111,7 @@ function PurchaseEntry({ onBack }) {
 
           {purchaseList.length > 0 && (
             <div className="totals">
-           
               <div className="total-amount">Total: Rs.{total.toFixed(2)}</div>
-
               <button onClick={handleSubmit} className="submit-btn">Submit Purchase</button>
             </div>
           )}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./RecentSales.css";
 
-function RecentSales({ setView }) {
+function RecentSales() {
   const [recentSales, setRecentSales] = useState([]);
 
   useEffect(() => {
@@ -11,8 +11,8 @@ function RecentSales({ setView }) {
     setRecentSales(latest10);
   }, []);
 
-  const formatDateTime = (isoString) => {
-    const dateObj = new Date(isoString);
+  const formatDateTime = (timestamp, fallbackDate) => {
+    const dateObj = new Date(timestamp || fallbackDate);  // Fallback if timestamp missing
 
     const options = {
       timeZone: "Asia/Kolkata",
@@ -48,7 +48,7 @@ function RecentSales({ setView }) {
           </thead>
           <tbody>
             {recentSales.map((sale, index) => {
-              const { date, time } = formatDateTime(sale.date);
+              const { date, time } = formatDateTime(sale.timestamp, sale.date);
               return (
                 <tr key={index}>
                   <td>{sale.itemName}</td>
