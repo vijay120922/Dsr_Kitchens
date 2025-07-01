@@ -1,12 +1,8 @@
-// src/components/DayWiseData.jsx
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./DayWiseData.css";
 
-function DayWiseData() {
+function DayWiseData({ setView }) {
   const [groupedData, setGroupedData] = useState({});
-  const navigate = useNavigate();
-  
 
   useEffect(() => {
     const sales = JSON.parse(localStorage.getItem("sales")) || [];
@@ -51,7 +47,7 @@ function DayWiseData() {
   return (
     <div className="daywise-data">
       <h2>📅 Day-wise Sales Report</h2>
-      <button onClick={() => navigate("/")} className="back-btn">← Back</button>
+      <button onClick={() => setView("")} className="back-btn">← Back</button>
       <button className="download-btn" onClick={downloadDaywiseCSV}>Download CSV</button>
 
       {Object.keys(groupedData).length === 0 ? (
@@ -89,16 +85,16 @@ function DayWiseData() {
                 </tbody>
               </table>
               <button
-  className="danger-btn"
-  onClick={() => {
-    if (confirm("Are you sure you want to delete all day-wise sales data?")) {
-      localStorage.removeItem("sales");
-      window.location.reload();
-    }
-  }}
->
-  🗑️ Reset Day-wise Data
-</button>
+                className="danger-btn"
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to delete all day-wise sales data?")) {
+                    localStorage.removeItem("sales");
+                    window.location.reload();
+                  }
+                }}
+              >
+                🗑️ Reset Day-wise Data
+              </button>
             </div>
           );
         })

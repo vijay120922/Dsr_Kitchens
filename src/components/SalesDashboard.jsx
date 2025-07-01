@@ -1,15 +1,11 @@
-// src/components/SalesDashboard.jsx
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./SalesDashboard.css";
 
-function SalesDashboard() {
+function SalesDashboard({ setView }) {
   const [summary, setSummary] = useState({});
-  const navigate = useNavigate();
 
   useEffect(() => {
     const allSales = JSON.parse(localStorage.getItem("sales")) || [];
-
     const today = new Date().toISOString().slice(0, 10);
     const todaySales = allSales.filter((s) => s.date === today);
 
@@ -49,7 +45,7 @@ function SalesDashboard() {
   return (
     <div className="dashboard-container">
       <h2>📊 Today's Sales</h2>
-      <button onClick={() => navigate("/")} className="back-btn">← Back</button>
+      <button onClick={() => setView("")} className="back-btn">← Back</button>
       <button className="download-btn" onClick={downloadCSV}>Download CSV</button>
 
       <div className="dashboard-summary">
@@ -70,16 +66,16 @@ function SalesDashboard() {
               <p><strong>₹{totalRevenue.toFixed(2)}</strong></p>
             </div>
             <button
-  className="danger-btn"
-  onClick={() => {
-    if (confirm("Are you sure you want to delete all sales data?")) {
-      localStorage.removeItem("sales");
-      window.location.reload(); // Refresh to reflect changes
-    }
-  }}
->
-  🗑️ Reset Sales Data
-</button>
+              className="danger-btn"
+              onClick={() => {
+                if (window.confirm("Are you sure you want to delete all sales data?")) {
+                  localStorage.removeItem("sales");
+                  window.location.reload();
+                }
+              }}
+            >
+              🗑️ Reset Sales Data
+            </button>
           </>
         )}
       </div>

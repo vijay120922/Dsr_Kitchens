@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useState, useEffect } from "react";
 import ItemManager from "./components/ItemManager";
 import PurchaseEntry from "./components/PurchaseEntry";
@@ -23,7 +22,7 @@ function App() {
       {!view && (
         <div className="home-grid">
           <h1 className="home-heading">DSR Kitchens</h1>
-          
+
           <div className="card-grid">
             <div className="card" onClick={() => setView("manage")}>
               <span className="card-icon">📋</span>
@@ -51,8 +50,8 @@ function App() {
 
       {view === "manage" && <ItemManager onBack={() => setView("")} />}
       {view === "purchase" && <PurchaseEntry onBack={() => setView("")} />}
-      {view === "dashboard" && <SalesDashboard onBack={() => setView("")} />}
-      {view === "history" && <DayWiseData onBack={() => setView("")} />}
+      {view === "dashboard" && <SalesDashboard setView={setView} />}
+      {view === "history" && <DayWiseData setView={setView} />}
     </div>
   );
 }
