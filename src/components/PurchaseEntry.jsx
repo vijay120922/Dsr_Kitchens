@@ -44,14 +44,16 @@ function PurchaseEntry({ onBack }) {
 
   const handleSubmit = () => {
     const sales = JSON.parse(localStorage.getItem("sales")) || [];
-    const timestamp = new Date().toISOString();  // Full Date & Time stored
+    const timestamp = new Date().toISOString();
+    const date = new Date().toISOString().slice(0, 10);  // Only Date for filtering
 
     const newSales = purchaseList.map((entry) => ({
       itemName: entry.name,
       price: entry.price,
       quantity: entry.quantity,
       total: entry.total,
-      timestamp: timestamp
+      timestamp: timestamp,  // Full Date & Time
+      date: date             // Only Date (YYYY-MM-DD) for Sales Dashboard
     }));
 
     const updatedSales = [...sales, ...newSales];
