@@ -6,15 +6,14 @@ function RecentSales({ setView }) {
 
   useEffect(() => {
     const sales = JSON.parse(localStorage.getItem("sales")) || [];
-    const sortedSales = [...sales].reverse(); 
+    const sortedSales = [...sales].reverse();
     const latest10 = sortedSales.slice(0, 10);
     setRecentSales(latest10);
   }, []);
 
   const formatDateTime = (isoString) => {
     const dateObj = new Date(isoString);
-    
-    // Convert to IST manually
+
     const options = {
       timeZone: "Asia/Kolkata",
       year: "numeric",
@@ -33,7 +32,6 @@ function RecentSales({ setView }) {
   return (
     <div className="recent-sales-container">
       <h2>🕒 Recent 10 Sales</h2>
-      <button onClick={() => setView("")} className="back-btn">← Back</button>
 
       {recentSales.length === 0 ? (
         <p>No sales recorded yet.</p>
