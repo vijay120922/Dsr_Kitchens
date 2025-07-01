@@ -3,6 +3,7 @@ import ItemManager from "./components/ItemManager";
 import PurchaseEntry from "./components/PurchaseEntry";
 import SalesDashboard from "./components/SalesDashboard";
 import DayWiseData from "./components/DayWiseData";
+import RecentSales from "./components/RecentSales";
 import "./App.css";
 
 function App() {
@@ -45,6 +46,9 @@ function App() {
               <p>Open Module</p>
             </div>
           </div>
+
+          {/* Recent Sales below cards */}
+          <RecentSales />
         </div>
       )}
 
